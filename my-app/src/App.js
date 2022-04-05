@@ -59,7 +59,7 @@ function App() {
       receipient_publickey: new CLString(receipient_publickey),
       bsc_transaction_hash: new CLString(bsc_transaction_hash),
       
-      amount: new CLU512(amountUnlock),
+      amount: new CLU512((Math.pow(10,9) * amountUnlock).toString()),
     });
 
     const session = DeployUtil.ExecutableDeployItem.newStoredContractByHash(
@@ -86,7 +86,7 @@ function App() {
 
     args = RuntimeArgs.fromMap({
       bsc_recipient_address: new CLString(bsc_recipient_address),
-      amount: new CLU512(amountLock),
+      amount: new CLU512((Math.pow(10,9) * amountLock).toString()),
       //  main contract hash
       contract_hash_str: new CLString("contract-152935c4378bbb59f4f9048a281d41306571f2f5fedc61f4b19aa00c0793418d")
     });
