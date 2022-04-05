@@ -15,7 +15,7 @@ import {
 
 function App() {
   const [signerConnected, setSignerConnected] = useState(false);
-
+  const [signerLocked, setSignerLocked] = useState(false);
   const [activeKey, setActiveKey] = useState("");
 
   const [receipient_publickey, setReceipient_publickey] = useState("")
@@ -31,7 +31,13 @@ function App() {
   };
 
   const getActiveKeyFromSigner = async () => {
-    return await Signer.getActivePublicKey();
+   
+    try {
+      return await Signer.getActivePublicKey();
+    } catch (err) {
+      console.log("Error is here: ",err.message)
+      return;
+    }
   };
 
   const connectToSigner = async () => {
@@ -42,7 +48,7 @@ function App() {
     const publicKey = CLPublicKey.fromHex(publicKeyHex);
     // contract hash
     const contractHash = decodeBase16(
-      "152935c4378bbb59f4f9048a281d41306571f2f5fedc61f4b19aa00c0793418d"
+      "4cf8c1d721724c3001b742ea8c51950c83f6fea36d6857820cd801f87d039f01"
     );
     const deployParams = new DeployUtil.DeployParams(publicKey,
       "casper-test",
@@ -109,36 +115,30 @@ function App() {
       return
     }
 
-    if (!activeKey) { 
-      return
-    }
     // 
     // check publickey format
     var regex1 = /^[0][1]/;
     var regex2 = /^[0][2]/;
-    if (!(receipient_publickey.length == 66 && regex1.test(receipient_publickey)) &&
-      !(receipient_publickey.length == 68 && regex2.test(receipient_publickey))) {
+    if (!(receipient_publickey.length === 66 && regex1.test(receipient_publickey)) &&
+      !(receipient_publickey.length === 68 && regex2.test(receipient_publickey))) {
       console.log("publickey format incorrect")
       return
     }
-    //
-    let key;
-    try {
-      key = await Signer.getActivePublicKey();
-    } catch (err) {
-      console.log(err)
-      return;
-    }
 
-    setActiveKey(key);
+    if (!signerConnected || signerLocked) { 
+      await connectToSigner();
+      return
+    }
+    //
+
     let deploy, deployJSON;
 
-    deploy = await createUnlockDeploy(key);
+    deploy = await createUnlockDeploy(activeKey);
         deployJSON = DeployUtil.deployToJson(deploy);
     let signedDeployJSON; 
-    
+
     try {
-      signedDeployJSON = await Signer.sign(deployJSON, key, key);
+      signedDeployJSON = await Signer.sign(deployJSON, activeKey, activeKey);
     } catch (err) {
       console.log(err)
       return;
@@ -157,30 +157,23 @@ function App() {
       console.log("please input 2 arguments")
       return
     }
-    if (!activeKey) { 
+    console.log("signerConnected is: ",signerConnected)
+    if (!signerConnected || signerLocked) { 
+      await connectToSigner();
       return
     }
     // 
     // check bsc_recipient_address format
     // 
-    //
-    let key;
-    try {
-      key = await Signer.getActivePublicKey();
-    } catch (err) {
-      console.log(err)
-      return;
-    }
-
-    setActiveKey(key);
+ 
     let deploy, deployJSON;
 
-    deploy = await createLockDeploy(key);
+    deploy = await createLockDeploy(activeKey);
         deployJSON = DeployUtil.deployToJson(deploy);
     let signedDeployJSON; 
     
     try {
-      signedDeployJSON = await Signer.sign(deployJSON, key, key);
+      signedDeployJSON = await Signer.sign(deployJSON, activeKey, activeKey);
     } catch (err) {
       console.log(err)
       return;
@@ -210,21 +203,22 @@ function App() {
     tmpfunc();
 
     window.addEventListener("signer:connected", (msg) => {
- 
+      console.log('msg is: ',msg)
+      setSignerLocked(!msg.detail.isUnlocked);
       setSignerConnected(true);
       setActiveKey(msg.detail.activeKey);
       
  
     });
     window.addEventListener("signer:disconnected", (msg) => {
-    
+      setSignerLocked(!msg.detail.isUnlocked);
       setSignerConnected(false);
       setActiveKey(msg.detail.activeKey);
    
 
     });
     window.addEventListener("signer:tabUpdated", (msg) => {
-
+      setSignerLocked(!msg.detail.isUnlocked);
       setSignerConnected(msg.detail.isConnected);
       setActiveKey(msg.detail.activeKey);
     });
@@ -234,21 +228,21 @@ function App() {
  
     });
     window.addEventListener("signer:locked", (msg) => {
-
+      setSignerLocked(!msg.detail.isUnlocked);
       setActiveKey(msg.detail.activeKey);
     });
     window.addEventListener("signer:unlocked", (msg) => {
-
+      setSignerLocked(!msg.detail.isUnlocked);
       setSignerConnected(msg.detail.isConnected);
       setActiveKey(msg.detail.activeKey);
     });
     window.addEventListener("signer:initialState", (msg) => {
       console.log("Initial State: ", msg.detail);
- 
+      setSignerLocked(!msg.detail.isUnlocked);
       setSignerConnected(msg.detail.isConnected);
       setActiveKey(msg.detail.activeKe);
     });
-  }, []);
+  }, [signerConnected]);
 
 
   return (
@@ -256,7 +250,7 @@ function App() {
       <div>
         <button onClick={connectToSigner}> connect to mysigner</button>
         <div>Public key</div>
-        <div> {activeKey}</div>
+        <div data-test> {activeKey}</div>
       </div>
       <hr />
       <div>======<strong>UNLOCK CSPR</strong> ======
