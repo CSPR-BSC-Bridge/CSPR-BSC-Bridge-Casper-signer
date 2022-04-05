@@ -99,13 +99,15 @@ app.post("/", async (req, res) => {
   let { signedDeployJSON } = req.body;
 
   let signedDeploy = DeployUtil.deployFromJson(signedDeployJSON).unwrap();
-  // new
 
-  let { deploy_hash} = await client.deploy(signedDeploy);  
-  console.log("deploy_hash is: ", deploy_hash)
- 
-
+  try {
+    let { deploy_hash } = await client.deploy(signedDeploy);
+    console.log("deploy_hash is: ", deploy_hash)
     res.status(200).send(deploy_hash);
+  } catch (e) { 
+    console.log("====error====\n",e.message,"\n=============\n")
+  };
+   
 });
 
 app.listen(9000, () => console.log("running on port 9000..."));
