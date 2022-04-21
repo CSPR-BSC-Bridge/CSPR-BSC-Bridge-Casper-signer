@@ -13,7 +13,6 @@ const {
     CasperClient,
 } = require("casper-js-sdk");
 
-
 const casperClient = new CasperClient("http://3.136.227.9:7777/rpc");
 
 const test = async () => {
@@ -22,3 +21,4 @@ const test = async () => {
 }
 
 test()
+

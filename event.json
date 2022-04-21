@@ -1,67 +1,67 @@
 [
-    {
-        "deploy_hash": "bac12d98990758baaccf58c828010ef7663e0723525f0fbe5d664a870d288a62"
-    },
-    {
-        "name": "lock_cspr",
-        "clValue": {
+  {
+    "deploy_hash": "bac12d98990758baaccf58c828010ef7663e0723525f0fbe5d664a870d288a62"
+  },
+  {
+    "name": "lock_cspr",
+    "clValue": {
+      "isCLValue": true,
+      "refType": [
+        "String",
+        "String"
+      ],
+      "data": [
+        [
+          {
             "isCLValue": true,
-            "refType": [
-                "String",
-                "String"
-            ],
-            "data": [
-                [
-                    {
-                        "isCLValue": true,
-                        "data": "amount"
-                    },
-                    {
-                        "isCLValue": true,
-                        "data": "1"
-                    }
-                ],
-                [
-                    {
-                        "isCLValue": true,
-                        "data": "bsc_recipient_address"
-                    },
-                    {
-                        "isCLValue": true,
-                        "data": "88888889"
-                    }
-                ],
-                [
-                    {
-                        "isCLValue": true,
-                        "data": "casper_sender_address"
-                    },
-                    {
-                        "isCLValue": true,
-                        "data": "account-hash-9a770006ffda6f5b40f9f2752e8e82ee4c7f0dc11d1e83ecda5b1d25598195a9"
-                    }
-                ],
-                [
-                    {
-                        "isCLValue": true,
-                        "data": "event_type"
-                    },
-                    {
-                        "isCLValue": true,
-                        "data": "lock_cspr"
-                    }
-                ],
-                [
-                    {
-                        "isCLValue": true,
-                        "data": "lock_unlock_cspr_contract"
-                    },
-                    {
-                        "isCLValue": true,
-                        "data": "contract-152935c4378bbb59f4f9048a281d41306571f2f5fedc61f4b19aa00c0793418d"
-                    }
-                ]
-            ]
-        }
+            "data": "amount"
+          },
+          {
+            "isCLValue": true,
+            "data": "1"
+          }
+        ],
+        [
+          {
+            "isCLValue": true,
+            "data": "bsc_recipient_address"
+          },
+          {
+            "isCLValue": true,
+            "data": "88888889"
+          }
+        ],
+        [
+          {
+            "isCLValue": true,
+            "data": "casper_sender_address"
+          },
+          {
+            "isCLValue": true,
+            "data": "account-hash-9a770006ffda6f5b40f9f2752e8e82ee4c7f0dc11d1e83ecda5b1d25598195a9"
+          }
+        ],
+        [
+          {
+            "isCLValue": true,
+            "data": "event_type"
+          },
+          {
+            "isCLValue": true,
+            "data": "lock_cspr"
+          }
+        ],
+        [
+          {
+            "isCLValue": true,
+            "data": "lock_unlock_cspr_contract"
+          },
+          {
+            "isCLValue": true,
+            "data": "contract-152935c4378bbb59f4f9048a281d41306571f2f5fedc61f4b19aa00c0793418d"
+          }
+        ]
+      ]
     }
+  }
 ]
